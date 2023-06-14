@@ -1,0 +1,101 @@
+<p-dialog [(visible)]="receptionDialog" [style]="{width: '70vw'}" header="{{'receptionTabPan' | translate}}" [modal]="true" styleClass="p-fluid" [maximizable]="true" [draggable]="false" [resizable]="false">
+    <ng-template pTemplate="content" >
+        <p-tabView>
+            <p-tabPanel header="{{'receptionTabPan' | translate}}">
+                <div class="grid">
+
+
+
+                    <div class="field col-12 md:col-6">
+                        <label for="2">{{'receptionReference' | translate}}<span style="color: rgba(255,0,0,0.94);">*</span></label>
+                        <input class="mb-2 mr-2" type="text" pInputText  placeholder="{{'receptionReference' | translate}}" id="2" [(ngModel)]="reception.reference"
+                        />
+                    </div>
+
+                    <div class="field col-12 md:col-6">
+                        <label for="4">{{'receptionDescription' | translate}}</label>
+                        <textarea id="4" pInputTextarea rows="5" cols="30" placeholder="{{'receptionDescription' | translate}}"  [(ngModel)]="reception.description"
+                        ></textarea>
+                    </div>
+
+                </div>
+            </p-tabPanel>
+            <p-tabPanel header="receptionReceptionItems">
+                <p-tabView [(activeIndex)]="activeTab">
+                    <p-tabPanel header="Création">
+                        <div class="grid">
+                            <div class="field col-11 md:col-3">
+                                <label>Produits</label>
+                                <p-dropdown  appendTo="body"  [options]="produitOfReceptionItems" [(ngModel)]="receptionItemsElement.produit"
+                                             id="1"  [filter]="true" filterMatchMode="contains" [showClear]="true" optionLabel="libelle"
+                                             placeholder="Produit"  >
+                                </p-dropdown>
+
+                            </div>
+                            <div class="field col-12 md:col-4">
+                                <label for="2">Quantite</label>
+                                <p-inputNumber class="mb-2 mr-2" id="quantite" placeholder="Quantite"  [(ngModel)]="receptionItemsElement.quantite"></p-inputNumber>
+
+                            </div>
+                            <div class="field col-11 md:col-3">
+                                <label>Magasin</label>
+                                <p-dropdown  appendTo="body"  [options]="magasins" [(ngModel)]="receptionItemsElement.magasin"
+                                             id="3"  [filter]="true" filterMatchMode="contains" [showClear]="true" optionLabel="reference"
+                                             placeholder="Magasin"  >
+                                </p-dropdown>
+
+                            </div>
+                            <div class="field col-12 md:col-1">
+                                <button pButton pRipple type="button" icon="pi pi-plus" class="mt-4" label="OK" (click)="addReceptionItems()"></button>
+                            </div>
+
+                        </div>
+                    </p-tabPanel>
+                    <p-tabPanel header="Liste {{item.receptionItems?.length > 0 ? '(' + item.receptionItems?.length + ')' : ''}}">
+                        <div class="card">
+                            <p-table [value]="item.receptionItems" [scrollable]="true" scrollHeight="200px">
+                                <ng-template pTemplate="header">
+                                    <tr>
+                                        <th>Produit</th>
+                                        <th>Quantite</th>
+                                        <th>Magasin</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-p>
+                                    <tr>
+                                        <td>{{p.produit?.libelle}}</td>
+                                        <td>{{p.quantite}}</td>
+                                        <td>{{p.magasin?.reference}}</td>
+                                        <td>
+                                            <button (click)="deleteReceptionItem(p)" pButton type="button" icon="pi pi-times"  class="p-button-rounded p-button-danger"></button>
+                                            <button (click)="editReceptionItem(p)" pButton type="button" icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2"></button>
+                                        </td>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                        </div>
+
+                    </p-tabPanel>
+                </p-tabView>
+            </p-tabPanel>
+
+
+        </p-tabView>
+
+    </ng-template>
+
+    <ng-template pTemplate="footer" >
+        <div class="grid-step">
+            <div style="margin-left: auto;">
+                <button pButton pRipple  label="{{'validate' | translate}}"  icon="pi pi-check" style="margin:10px" (click)="create()"></button>
+            </div>
+            <div>
+                <button pButton pRipple  label="{{'cancel' | translate}}" icon="pi pi-times" class="p-button-outlined" (click)="hideCreateDialog()"></button>
+            </div>
+
+        </div>
+    </ng-template>
+    <app-reception-create-admin></app-reception-create-admin>
+
+</p-dialog>
